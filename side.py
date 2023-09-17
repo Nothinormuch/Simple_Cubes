@@ -69,13 +69,14 @@ class storage:
             file+='/'
         try:
             fh= open(file+name,'rb')
-            for i in range(len(fh)):
+            while True:
                 imported_cubes.append(pickle.load(fh))
-            fh.close()
-            return imported_cubes
+
         except FileNotFoundError:
             print("No file with the name \"{}\" found in \"{}\" folder!".format(name,file))
-
+        except:
+            fh.close()
+            return imported_cubes
 
     def show_imported_cubes(cubes):
         for i in cubes:
