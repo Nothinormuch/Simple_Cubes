@@ -1,3 +1,6 @@
+#Imporing pickle for storage
+import pickle
+
 #square object (9 of these squares are there for each face)
 class square:
     co_no=1
@@ -34,13 +37,57 @@ class face:
 #cube object(litreally) which will have 6 Faces, so it adds up to 54 of those small and cute squares 
 
 class cube:
-    def __init__(self):
+    cbno=1
+    cbname='cube {}'.format(cbno)
+    def __init__(self,cubename=cbname):
         self.face1=face()
         self.face2=face()
         self.face3=face()
         self.face4=face()
         self.face5=face()
         self.face6=face()
+        #this might go wrong(i will know when i test it)
+        self.cbname=cubename
+        cube.cbno+=1
+        cube.cbname='cube {}'.format(cube.cbno)
+
+
+#Class for storing the cube object and opening it
+class storage:
+    cubebag=[]
+    def exportt(cube,file='',name='cube.log'):
+        if file !='':
+            file+='/'
+        fh= open(file+name,'wb')
+        pickle.dump(cube,fh)
+        fh.close()
+        print("Sucessfully Exported {}!")
+    
+    def importt(file='',name='cube.log'):
+        if file !='':
+            file+='/'
+        try:
+            fh= open(file+name,'rb')
+            return [i for i in fh]
+        except FileNotFoundError:
+            print("No file with the name \"{}\" found in \"{}\" folder!".format(name,file))
+    
+    def show_imported_cubes(cubes):
+        for i in cubes:
+            print(i.cbname+':')
+            show_allface(i)
+
+
+#adding cubes in the list cube            
+def chose_maincube(cubebag=storage.cubebag,cubename='cube 1'):
+    for i in cubebag:
+        ck=False
+        if i.cbname==cubename:
+            ck=True
+            return i
+    if ck==False:
+        print("No cube with the name {} Found!".format(cubename))
+        
 
 # this series function make my life easier and There might be a way to compress this into one function but I dont want to overload my two small brain cells 
 def select_face(cube,face):
@@ -61,10 +108,6 @@ def readable_face(cube,face):
     return [[select_column(cube,face,1,1).colour,select_column(cube,face,1,2).colour,select_column(cube,face,1,3).colour],[select_column(cube,face,2,1).colour,select_column(cube,face,2,2).colour,select_column(cube,face,2,3).colour],[select_column(cube,face,3,1).colour,select_column(cube,face,3,2).colour,select_column(cube,face,3,3).colour]]
 
 
-#making a temp cube
-
-
-
 
 #This function is very temperory will improve(soon)
 # It shows the colours of the cube per face in the atribute
@@ -75,7 +118,13 @@ def show_face(cube, face):
         print('\n')
 
 
-c1=cube()
+#Quick function to show all faces of the cube
+def show_allface(cube):
+    for i in range(6):
+        print("Face {}".format(i))
+        show_face(cube,i)
 
+c1=cube("Testcube")
 select_column(c1,1,2,1).colour='Red'
-show_face(c1,1)
+name=input('Enter the name of the cube- ')
+storage.exportt(c1,'',name)
