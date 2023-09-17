@@ -6,7 +6,7 @@ import side
 def update_storage():
     imported_cubes=side.storage.importt('','Testcube.log')
     for i in imported_cubes:
-        if i.side.cbname in side.storage.cubebag:
+        if i.cbname in side.storage.cubebag:
             print('{} is already added!'.format(i.side.cbname))
         else:
             side.storage.cubebag.append(i)
@@ -14,4 +14,3 @@ def update_storage():
 update_storage()
 for i in side.storage.cubebag:
     side.show_allface(i)
-# print(side.storage.importt('','Testcube.log'))

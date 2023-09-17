@@ -127,5 +127,5 @@ def show_face(cube, face):
 #Quick function to show all faces of the cube
 def show_allface(cube):
     for i in range(6):
-        print("Face {}".format(i))
+        print("Face {}".format(i+1))
         show_face(cube,i)
