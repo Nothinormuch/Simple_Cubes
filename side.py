@@ -78,9 +78,9 @@ class storage:
             fh.close()
             return imported_cubes
 
-    def show_imported_cubes(cubes):
+    def show_cubes(cubes):
         for i in cubes:
-            print(i.cbname+':')
+            print(i.cbname+':\n')
             show_allface(i)
 
 
@@ -127,5 +127,5 @@ def show_face(cube, face):
 #Quick function to show all faces of the cube
 def show_allface(cube):
     for i in range(6):
-        print("Face {}".format(i+1))
+        print("Face {}:\n".format(i+1))
         show_face(cube,i)
