@@ -17,5 +17,9 @@ def update_storage():
         else:
             side.storage.cubebag.append(i)
 
+
+
 update_storage()
+oncube=side.chose_activecube(cubename='Testcube1',cubebag=side.storage.cubebag)
+side.select_column(oncube,1,1,1).colour='Green'
 side.storage.show_cubes(side.storage.cubebag)

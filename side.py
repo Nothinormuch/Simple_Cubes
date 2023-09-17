@@ -85,9 +85,9 @@ class storage:
 
 
 #adding cubes in the list cube            
-def chose_maincube(cubebag=storage.cubebag,cubename='cube 1'):
+def chose_activecube(cubename,cubebag=storage.cubebag):
+    ck=False
     for i in cubebag:
-        ck=False
         if i.cbname==cubename:
             ck=True
             return i
