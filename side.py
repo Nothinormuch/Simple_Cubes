@@ -123,8 +123,3 @@ def show_allface(cube):
     for i in range(6):
         print("Face {}".format(i))
         show_face(cube,i)
-
-c1=cube("Testcube")
-select_column(c1,1,2,1).colour='Red'
-name=input('Enter the name of the cube- ')
-storage.exportt(c1,'',name)
