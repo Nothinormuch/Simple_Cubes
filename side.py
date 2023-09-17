@@ -64,14 +64,19 @@ class storage:
         print("Sucessfully Exported {}!")
     
     def importt(file='',name='cube.log'):
+        imported_cubes=[]
         if file !='':
             file+='/'
         try:
             fh= open(file+name,'rb')
-            return [i for i in fh]
+            for i in range(len(fh)):
+                imported_cubes.append(pickle.load(fh))
+            fh.close()
+            return imported_cubes
         except FileNotFoundError:
             print("No file with the name \"{}\" found in \"{}\" folder!".format(name,file))
-    
+
+
     def show_imported_cubes(cubes):
         for i in cubes:
             print(i.cbname+':')
