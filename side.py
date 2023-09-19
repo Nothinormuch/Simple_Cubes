@@ -84,6 +84,9 @@ class storage:
             show_allface(i)
 
 
+    
+
+
 #adding cubes in the list cube            
 def chose_activecube(cubename,cubebag=storage.cubebag):
     ck=False
@@ -129,3 +132,15 @@ def show_allface(cube):
     for i in range(6):
         print("Face {}:\n".format(i+1))
         show_face(cube,i)
+
+
+#Updating Storage
+def update_storage():
+    imported_cubes=(storage.importt('','Testcube1.log'))
+    for i in storage.importt('','Testcube2.log'):
+        imported_cubes.append(i)
+    for i in imported_cubes:
+        if i.cbname in storage.cubebag:
+            print('{} is already added!'.format(i.cbname))
+        else:
+            storage.cubebag.append(i)
