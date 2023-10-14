@@ -61,7 +61,7 @@ class storage:
         fh= open(file+name,'wb')
         pickle.dump(cube,fh)
         fh.close()
-        print("Sucessfully Exported {}!")
+        return("Sucessfully Exported {}!")
     
     def importt(file='',name='cube.log'):
         imported_cubes=[]
@@ -73,15 +73,16 @@ class storage:
                 imported_cubes.append(pickle.load(fh))
 
         except FileNotFoundError:
-            print("No file with the name \"{}\" found in \"{}\" folder!".format(name,file))
+            return("No file with the name \"{}\" found in \"{}\" folder!".format(name,file))
         except:
             fh.close()
             return imported_cubes
 
     def show_cubes(cubes):
+        returnstr=""
         for i in cubes:
-            print(i.cbname+':\n')
-            show_allface(i)
+            returnstr+=i.cbname+':\n'
+            returnstr+=show_allface(i)
 
 
     
@@ -95,7 +96,7 @@ def chose_activecube(cubename,cubebag=storage.cubebag):
             ck=True
             return i
     if ck==False:
-        print("No cube with the name {} Found!".format(cubename))
+        return("No cube with the name {} Found!".format(cubename))
         
 
 # this series function make my life easier and There might be a way to compress this into one function but I dont want to overload my two small brain cells 
@@ -121,17 +122,21 @@ def readable_face(cube,face):
 #This function is very temperory will improve(soon)
 # It shows the colours of the cube per face in the atribute
 def show_face(cube, face):
+    returnstr=""
     for i in range(0,3):
         for j in range(0,3):
-            print(readable_face(cube,face)[i][j]+"\t", end='')
-        print('\n')
+            returnstr+=readable_face(cube,face)[i][j]+"\t", end=''
+        returnstr+='\n'
+    return(returnstr)
 
 
 #Quick function to show all faces of the cube
 def show_allface(cube):
+    returnstr=""
     for i in range(6):
-        print("Face {}:\n".format(i+1))
-        show_face(cube,i)
+        returnstr+=("Face {}:\n".format(i+1)
+        returnstr+=show_face(cube,i)
+    return(returnstr)
 
 
 #Updating Storage
@@ -141,6 +146,6 @@ def update_storage():
         imported_cubes.append(i)
     for i in imported_cubes:
         if i.cbname in storage.cubebag:
-            print('{} is already added!'.format(i.cbname))
+            return('{} is already added!'.format(i.cbname))
         else:
             storage.cubebag.append(i)
