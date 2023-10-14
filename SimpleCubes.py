@@ -125,7 +125,7 @@ def show_face(cube, face):
     returnstr=""
     for i in range(0,3):
         for j in range(0,3):
-            returnstr+=readable_face(cube,face)[i][j]+"\t", end=''
+            returnstr+=readable_face(cube,face)[i][j]+"\t"
         returnstr+='\n'
     return(returnstr)
 
