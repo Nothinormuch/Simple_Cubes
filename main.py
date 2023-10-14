@@ -11,4 +11,4 @@ def temp_creation():
 sc.update_storage()
 oncube=sc.chose_activecube(cubename='Testcube1',cubebag=sc.storage.cubebag)
 sc.select_column(oncube,1,1,1).colour='Green'
-sc.storage.show_cubes(sc.storage.cubebag)
+print(sc.storage.show_cubes(sc.storage.cubebag))
