@@ -134,7 +134,7 @@ def show_face(cube, face):
 def show_allface(cube):
     returnstr=""
     for i in range(6):
-        returnstr+=("Face {}:\n".format(i+1)
+        returnstr+="Face {}:\n".format(i+1)
         returnstr+=show_face(cube,i)
     return(returnstr)
 
