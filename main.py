@@ -1,4 +1,5 @@
 import SimpleCubes as sc
+import os
 def temp_creation():
     c1=sc.cube("Testcube1")
     c2=sc.cube("Testcube2")

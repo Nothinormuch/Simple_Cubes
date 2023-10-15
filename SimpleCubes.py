@@ -1,5 +1,11 @@
 #Imporing pickle for storage
+#to get the paths and manage them
 import pickle
+import os
+
+#changing the working directory
+os.chdir("/home/nothin_mint/Documents/Code/Cube_0.01")
+
 
 #square object (9 of these squares are there for each face)
 class square:
@@ -74,7 +80,7 @@ class storage:
 
         except FileNotFoundError:
             storage.fileNotFound(file,name)
-        except:
+        finally:
             fh.close()
             return imported_cubes
     def fileNotFound(file,name):
@@ -84,7 +90,8 @@ class storage:
         returnstr=""
         for i in cubes:
             returnstr+=i.cbname+':\n'
-            returnstr+=show_allface(i)
+            returnstr+=allFace(i)
+        return(returnstr)
 
 
     
