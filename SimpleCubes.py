@@ -39,7 +39,7 @@ class face:
 class cube:
     cbno=1
     cbname='cube {}'.format(cbno)
-    def __init__(self,cubename=cbname):
+    def __init__(self,cubeName=cbname):
         self.face1=face()
         self.face2=face()
         self.face3=face()
@@ -47,14 +47,14 @@ class cube:
         self.face5=face()
         self.face6=face()
         #this might go wrong(i will know when i test it)
-        self.cbname=cubename
+        self.cbname=cubeName
         cube.cbno+=1
         cube.cbname='cube {}'.format(cube.cbno)
 
 
 #Class for storing the cube object and opening it
 class storage:
-    cubebag=[]
+    cubeBag=[]
     def exportt(cube,file='',name='cube.log'):
         if file !='':
             file+='/'
@@ -73,10 +73,12 @@ class storage:
                 imported_cubes.append(pickle.load(fh))
 
         except FileNotFoundError:
-            return("No file with the name \"{}\" found in \"{}\" folder!".format(name,file))
+            storage.fileNotFound(file,name)
         except:
             fh.close()
             return imported_cubes
+    def fileNotFound(file,name):
+        print("No file with the name \"{}\" found in \"{}\" folder!".format(name,file))
 
     def show_cubes(cubes):
         returnstr=""
@@ -89,14 +91,17 @@ class storage:
 
 
 #adding cubes in the list cube            
-def chose_activecube(cubename,cubebag=storage.cubebag):
+def chose_activecube(cubeName,cubeBag=storage.cubeBag):
     ck=False
-    for i in cubebag:
-        if i.cbname==cubename:
+    for i in cubeBag:
+        if i.cbname==cubeName:
             ck=True
             return i
     if ck==False:
-        return("No cube with the name {} Found!".format(cubename))
+        cubeNotFound(cubeName)
+
+def cubeNotFound(cubeName):
+    print("No cube with the name {} Found!".format(cubeName))
         
 
 # this series function make my life easier and There might be a way to compress this into one function but I dont want to overload my two small brain cells 
@@ -121,7 +126,7 @@ def readable_face(cube,face):
 
 #This function is very temperory will improve(soon)
 # It shows the colours of the cube per face in the atribute
-def show_face(cube, face):
+def face(cube, face):
     returnstr=""
     for i in range(0,3):
         for j in range(0,3):
@@ -131,7 +136,7 @@ def show_face(cube, face):
 
 
 #Quick function to show all faces of the cube
-def show_allface(cube):
+def allFace(cube):
     returnstr=""
     for i in range(6):
         returnstr+="Face {}:\n".format(i+1)
@@ -145,7 +150,10 @@ def update_storage():
     for i in storage.importt('','Testcube2.log'):
         imported_cubes.append(i)
     for i in imported_cubes:
-        if i.cbname in storage.cubebag:
-            return('{} is already added!'.format(i.cbname))
+        if i.cbname in storage.cubeBag:
+            cubeAlreadyAdded(i)
         else:
-            storage.cubebag.append(i)
+            storage.cubeBag.append(i)
+
+def cubeAlreadyAdded(i):
+    print('{} is already added!'.format(i.cbname))
