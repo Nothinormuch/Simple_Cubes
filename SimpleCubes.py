@@ -61,7 +61,8 @@ class cube:
 #Class for storing the cube object and opening it
 class storage:
     cubeBag=[]
-    def exportt(cube,file='',name='cube.log'):
+    filepath=(os.path.dirname(__file__))
+    def exportt(cube,file=filepath,name='cube.log'):
         if file !='':
             file+='/'
         fh= open(file+name,'wb')
@@ -69,7 +70,7 @@ class storage:
         fh.close()
         return("Sucessfully Exported {}!")
     
-    def importt(file='',name='cube.log'):
+    def importt(file=filepath,name='cube.log'):
         imported_cubes=[]
         if file !='':
             file+='/'
@@ -90,7 +91,7 @@ class storage:
         returnstr=""
         for i in cubes:
             returnstr+=i.cbname+':\n'
-            returnstr+=allFace(i)
+            returnstr+=show_allFace(i)+'\n'
         return(returnstr)
 
 
@@ -133,7 +134,7 @@ def readable_face(cube,face):
 
 #This function is very temperory will improve(soon)
 # It shows the colours of the cube per face in the atribute
-def face(cube, face):
+def show_face(cube, face):
     returnstr=""
     for i in range(0,3):
         for j in range(0,3):
@@ -143,7 +144,7 @@ def face(cube, face):
 
 
 #Quick function to show all faces of the cube
-def allFace(cube):
+def show_allFace(cube):
     returnstr=""
     for i in range(6):
         returnstr+="Face {}:\n".format(i+1)
@@ -153,8 +154,8 @@ def allFace(cube):
 
 #Updating Storage
 def update_storage():
-    imported_cubes=(storage.importt('','Testcube1.log'))
-    for i in storage.importt('','Testcube2.log'):
+    imported_cubes=(storage.importt(storage.filepath,'Testcube1.log'))
+    for i in storage.importt(storage.filepath,'Testcube2.log'):
         imported_cubes.append(i)
     for i in imported_cubes:
         if i.cbname in storage.cubeBag:
