@@ -3,10 +3,6 @@
 import pickle
 import os
 
-#changing the working directory
-os.chdir("/home/nothin_mint/Documents/Code/Cube_0.01")
-
-
 #square object (9 of these squares are there for each face)
 class square:
     co_no=1
@@ -33,10 +29,12 @@ class row:
 # face contains 3 rows, one below the other with makes it contain 9 of those little squares
 class face:
     fc_no=1
-    def __init__(self):
+    def __init__(self,vector):
+        direction,axis=vector
         self.ro1=row()
         self.ro2=row()
         self.ro3=row()
+        self.faceareavector=cartesiansystem.faceareavector(direction,axis)
         self.fc_no=face.fc_no
         face.fc_no+=1
 
@@ -45,22 +43,22 @@ class face:
 class cube:
     cbno=1
     cbname='cube {}'.format(cbno)
-    def __init__(self,cubeName=cbname):
-        self.face1=face()
-        self.face2=face()
-        self.face3=face()
-        self.face4=face()
-        self.face5=face()
-        self.face6=face()
-        #this might go wrong(i will know when i test it)
-        self.cbname=cubeName
+    def __init__(self,cubename=cbname):
+        self.face1=face(('+','x'))
+        self.face2=face(('+','y'))
+        self.face3=face(('+','z'))
+        self.face4=face(('-','x'))
+        self.face5=face(('-','y'))
+        self.face6=face(('-','z'))
+        #this might go wrong(i will know when i test it) - it didn't most probably
+        self.cbname=cubename
         cube.cbno+=1
         cube.cbname='cube {}'.format(cube.cbno)
 
 
 #Class for storing the cube object and opening it
 class storage:
-    cubeBag=[]
+    cubebag=[]
     filepath=(os.path.dirname(__file__))
     def exportt(cube,file=filepath,name='cube.log'):
         if file !='':
@@ -84,6 +82,7 @@ class storage:
         finally:
             fh.close()
             return imported_cubes
+        
     def fileNotFound(file,name):
         print("No file with the name \"{}\" found in \"{}\" folder!".format(name,file))
 
@@ -93,23 +92,35 @@ class storage:
             returnstr+=i.cbname+':\n'
             returnstr+=show_allFace(i)+'\n'
         return(returnstr)
-
-
     
 
+    def update_storage():
+        for i in os.listdir():
+            if i.endswith('.log'):
+                storage.cubebag+=storage.importt(storage.filepath,i)
+
+
+class cartesiansystem:
+    class faceareavector:
+        def __init__(self,direction,axis):
+            self.axis=axis
+            self.direction=direction
+
+        def __str__(self):
+            return str(self.direction)+str(self.axis)
 
 #adding cubes in the list cube            
-def chose_activecube(cubeName,cubeBag=storage.cubeBag):
+def chose_activecube(cubename,cubegag=storage.cubebag):
     ck=False
-    for i in cubeBag:
-        if i.cbname==cubeName:
+    for i in cubegag:
+        if i.cbname==cubename:
             ck=True
             return i
     if ck==False:
-        cubeNotFound(cubeName)
+        cubeNotFound(cubename)
 
-def cubeNotFound(cubeName):
-    print("No cube with the name {} Found!".format(cubeName))
+def cubeNotFound(cubename):
+    print("No cube with the name {} Found!".format(cubename))
         
 
 # this series function make my life easier and There might be a way to compress this into one function but I dont want to overload my two small brain cells 
@@ -153,15 +164,7 @@ def show_allFace(cube):
 
 
 #Updating Storage
-def update_storage():
-    imported_cubes=(storage.importt(storage.filepath,'Testcube1.log'))
-    for i in storage.importt(storage.filepath,'Testcube2.log'):
-        imported_cubes.append(i)
-    for i in imported_cubes:
-        if i.cbname in storage.cubeBag:
-            cubeAlreadyAdded(i)
-        else:
-            storage.cubeBag.append(i)
+
 
 def cubeAlreadyAdded(i):
     print('{} is already added!'.format(i.cbname))
