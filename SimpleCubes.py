@@ -2,14 +2,28 @@
 #to get the paths and manage them
 import pickle
 import os
-
+import math
+import CartesianSystem as csys
 #square object (9 of these squares are there for each face)
 class square:
     co_no=1
-    def __init__(self,colour):
+    def __init__(self,colour,x,y):
         self.colour=colour
         self.co_no=square.co_no
+        self.point=csys.point(x,y)
         square.co_no+=1
+    
+
+    #making a definition to convert co_no to column number per row
+    def co_no_perrow(co_no,ro_no):
+        if ro_no==1:
+            return co_no
+        elif ro_no==2:
+            return co_no-3
+        elif ro_no==3:
+            return co_no-6
+        else:
+            return("Error while using column number for each row!")
         
     #definition which i most probably would not need
     #it gives me the square number in one cube
@@ -20,9 +34,9 @@ class square:
 class row:
     ro_no=1
     def __init__(self):
-        self.co1=square('None')
-        self.co2=square('None')
-        self.co3=square('None')
+        self.co1=square('None',square.co_no_perrow(square.co_no,row.ro_no),row.ro_no)
+        self.co2=square('None',square.co_no_perrow(square.co_no,row.ro_no),row.ro_no)
+        self.co3=square('None',square.co_no_perrow(square.co_no,row.ro_no),row.ro_no)
         self.ro_no=row.ro_no
         row.ro_no+=1
         
@@ -34,7 +48,7 @@ class face:
         self.ro1=row()
         self.ro2=row()
         self.ro3=row()
-        self.faceareavector=cartesiansystem.faceareavector(direction,axis)
+        self.faceareavector=faceareavector(direction,axis)
         self.fc_no=face.fc_no
         face.fc_no+=1
 
@@ -100,14 +114,15 @@ class storage:
                 storage.cubebag+=storage.importt(storage.filepath,i)
 
 
-class cartesiansystem:
-    class faceareavector:
-        def __init__(self,direction,axis):
-            self.axis=axis
-            self.direction=direction
 
-        def __str__(self):
-            return str(self.direction)+str(self.axis)
+                
+class faceareavector:
+    def __init__(self,direction,axis):
+        self.axis=axis
+        self.direction=direction
+
+    def __str__(self):
+        return str(self.direction)+str(self.axis)
 
 #adding cubes in the list cube            
 def chose_activecube(cubename,cubegag=storage.cubebag):
@@ -159,7 +174,7 @@ def show_allFace(cube):
     returnstr=""
     for i in range(6):
         returnstr+="Face {}:\n".format(i+1)
-        returnstr+=show_face(cube,i)
+        returnstr+=show_face(cube,i+1)
     return(returnstr)
 
 
