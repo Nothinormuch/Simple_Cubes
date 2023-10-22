@@ -1,5 +1,6 @@
 import SimpleCubes as sc
 import CartesianSystem as csys
+import streamlit as st
 def temp_creation():
     c1=sc.cube("Testcube1")
     c2=sc.cube("Testcube2")
@@ -11,4 +12,4 @@ def temp_show():
     sc.select_column(oncube,1,1,1).colour='Green'
     return(sc.storage.show_cubes(sc.storage.cubebag))
 
-print(temp_show())
+st.text(temp_show())

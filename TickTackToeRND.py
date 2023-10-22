@@ -2,10 +2,8 @@ import SimpleCubes as sc
 import math
 import CartesianSystem as csys
 import itertools as itool
-grid1=sc.cube("Grid1")
-def temp_update(cube,Player):
-    row=int(input("Enter the row number: "))
-    column=int(input("Enter the column number: "))
+
+def temp_update(cube,Player,row,column):
     if sc.select_column(grid1,1,row,column).colour=="None":
         sc.select_column(grid1,1,row,column).colour=Player
         sc.show_face(cube,1)
@@ -18,16 +16,7 @@ def changePlayer(Player):
         return "O"
     else:
         return "X"
-def main():
-    Player="X"
-    game=True
-    while game:
-        print(f"Player \"{Player}\"('s) Turn: ")
-        temp_update(grid1,Player)
-        print(sc.show_face(grid1,1))
-        game=win_check()
-        Player=changePlayer(Player)  
-    print(f"Player {changePlayer(Player)}, You win!\n\nThe Final Grid: \n"+sc.show_face(grid1,1))
+
 
 def win_check():
     points=[csys.point(x,y) for x in range(1,4) for y in range(1,4)]
