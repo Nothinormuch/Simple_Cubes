@@ -4,15 +4,25 @@ import pickle
 import os
 import math
 import CartesianSystem as csys
+import tkinter as tk
+import TickTackToeRND as ttt
+
+# class clientData():
+#     window=tk.Tk()
+
+
 #square object (9 of these squares are there for each face)
+
 class square:
     co_no=1
     def __init__(self,colour,x,y):
         self.colour=colour
         self.co_no=square.co_no
         self.point=csys.point(x,y)
+        # this is specifically for TTT
+        # self.button=tk.Button(clientData.window,text=colour,command=lambda: button_pressed_temp(x,y))
         square.co_no+=1
-    
+        
 
     #making a definition to convert co_no to column number per row
     def co_no_perrow(co_no,ro_no):
@@ -156,7 +166,30 @@ def select_column(cube,face,row,column):
 def readable_face(cube,face):
     return [[select_column(cube,face,1,1).colour,select_column(cube,face,1,2).colour,select_column(cube,face,1,3).colour],[select_column(cube,face,2,1).colour,select_column(cube,face,2,2).colour,select_column(cube,face,2,3).colour],[select_column(cube,face,3,1).colour,select_column(cube,face,3,2).colour,select_column(cube,face,3,3).colour]]
 
+# This function gives me a the buttons from the collumns
+def readable_button(cube,face):
+    return [[select_column(cube,face,1,1).button,select_column(cube,face,1,2).button,select_column(cube,face,1,3).button],[select_column(cube,face,2,1).button,select_column(cube,face,2,2).button,select_column(cube,face,2,3).button],[select_column(cube,face,3,1).button,select_column(cube,face,3,2).button,select_column(cube,face,3,3).button]]
 
+#Aggrigate of the above two functions
+def readable_pices(cube,face):
+    return [[select_column(cube,face,1,1),select_column(cube,face,1,2),select_column(cube,face,1,3)],[select_column(cube,face,2,1),select_column(cube,face,2,2),select_column(cube,face,2,3)],[select_column(cube,face,3,1),select_column(cube,face,3,2),select_column(cube,face,3,3)]]
+
+# class client():
+#     grid1=cube("grid1")
+#     Player="X"
+#     window=tk.Tk()
+#     print(f"Player \"{Player}\"('s) Turn: ")
+#     buttons=[j.button for j in [i for i in readable_pices(grid1,1)]]
+
+# def button_pressed_update(x,y):
+#     row=y
+#     column=x
+#     ttt.update(client.grid1,client.Player,row,column)
+#     for i in client.buttons:
+#         i.grid_remove()
+#     client.buttons=[j for j in [i for i in readable_pices(client.grid1,1)]]
+#     for i in client.buttons:
+#         i.button.grid(row=i.point.y,column=i.point.x)
 
 #This function is very temperory will improve(soon)
 # It shows the colours of the cube per face in the atribute
@@ -167,6 +200,8 @@ def show_face(cube, face):
             returnstr+=readable_face(cube,face)[i][j]+"\t"
         returnstr+='\n'
     return(returnstr)
+
+
 
 
 #Quick function to show all faces of the cube
@@ -183,3 +218,14 @@ def show_allFace(cube):
 
 def cubeAlreadyAdded(i):
     print('{} is already added!'.format(i.cbname))
+
+
+
+
+
+
+
+grid1=cube("grid1")
+
+
+print("Hello")
