@@ -10,6 +10,7 @@ import TickTackToeRND as ttt
 
 
 class square:
+    default=''
     co_no=1
     def __init__(self,colour,x,y):
         self.colour=colour
@@ -40,9 +41,9 @@ class square:
 class row:
     ro_no=1
     def __init__(self):
-        self.co1=square('None',square.co_no_perrow(square.co_no,row.ro_no),row.ro_no)
-        self.co2=square('None',square.co_no_perrow(square.co_no,row.ro_no),row.ro_no)
-        self.co3=square('None',square.co_no_perrow(square.co_no,row.ro_no),row.ro_no)
+        self.co1=square(square.default,square.co_no_perrow(square.co_no,row.ro_no),row.ro_no)
+        self.co2=square(square.default,square.co_no_perrow(square.co_no,row.ro_no),row.ro_no)
+        self.co3=square(square.default,square.co_no_perrow(square.co_no,row.ro_no),row.ro_no)
         self.ro_no=row.ro_no
         row.ro_no+=1
         
@@ -79,8 +80,7 @@ class cube:
 #Class for storing the cube object and opening it
 class storage:
     cubebag=[]
-    filepath=(os.path.dirname(__file__))
-    def exportt(cube,file=filepath,name='cube.log'):
+    def exportt(cube,file="C:\\Users\\ashis\\OneDrive\\Documents\\Nikhil\'s Projects\\Cube_0.01\\",name='cube.log'):
         if file !='':
             file+='/'
         fh= open(file+name,'wb')
@@ -88,12 +88,12 @@ class storage:
         fh.close()
         return("Sucessfully Exported {}!")
     
-    def importt(file=filepath,name='cube.log'):
+    def importt(file="C:\\Users\\ashis\\OneDrive\\Documents\\Nikhil\'s Projects\\Cube_0.01\\",name='cube.log'):
+        fh= open(file+name,'rb')
         imported_cubes=[]
         if file !='':
             file+='/'
         try:
-            fh= open(file+name,'rb')
             while True:
                 imported_cubes.append(pickle.load(fh))
 
@@ -115,9 +115,9 @@ class storage:
     
 
     def update_storage():
-        for i in os.listdir():
+        for i in os.listdir(r"C:\Users\ashis\OneDrive\Documents\Nikhil's Projects\Cube_0.01"):
             if i.endswith('.log'):
-                storage.cubebag+=storage.importt(storage.filepath,i)
+                storage.cubebag+=storage.importt(name=i)
 
 
 
