@@ -7,11 +7,7 @@ import CartesianSystem as csys
 import tkinter as tk
 import TickTackToeRND as ttt
 
-# class clientData():
-#     window=tk.Tk()
 
-
-#square object (9 of these squares are there for each face)
 
 class square:
     co_no=1
@@ -19,8 +15,8 @@ class square:
         self.colour=colour
         self.co_no=square.co_no
         self.point=csys.point(x,y)
-        # this is specifically for TTT
-        # self.button=tk.Button(clientData.window,text=colour,command=lambda: button_pressed_temp(x,y))
+        # this is specifically for TTT tk.Button(clientData.window,text=colour,command=lambda: button_pressed_temp(x,y))
+        self.button=None
         square.co_no+=1
         
 
@@ -156,7 +152,7 @@ def select_row(cube,face,row):
     rows=[select_face(cube,face).ro1,select_face(cube,face).ro2,select_face(cube,face).ro3]
     return rows[row-1]
 #This is the final and most useable function which takes Cube Name(Variable),Face no.,row no. and column no. to give the object of that column to be used to get the co_no or the colour(Which are the only functions I have managed to code till now)
-def select_column(cube,face,row,column):
+def select_column(cube,face,row,column) -> square:
     columns=[(select_row(cube,face,row).co1),(select_row(cube,face,row).co2),(select_row(cube,face,row).co3)]
     return columns[column-1]
 
@@ -220,12 +216,3 @@ def cubeAlreadyAdded(i):
     print('{} is already added!'.format(i.cbname))
 
 
-
-
-
-
-
-grid1=cube("grid1")
-
-
-print("Hello")

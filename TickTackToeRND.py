@@ -7,10 +7,13 @@ def update(cube,Player,row,column):
     if sc.select_column(cube,1,row,column).colour=="None":
         sc.select_column(cube,1,row,column).colour=Player
         sc.show_face(cube,1)
+        return False
     else:
         print("That Space is already occupied!")
         print("Try again!")
-        update(cube,Player)
+        return True
+    
+    
 def changePlayer(Player):
     if Player=="X":
         return "O"
