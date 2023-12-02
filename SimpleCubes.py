@@ -16,7 +16,6 @@ class square:
         self.colour=colour
         self.co_no=square.co_no
         self.point=csys.point(x,y)
-        # this is specifically for TTT tk.Button(clientData.window,text=colour,command=lambda: button_pressed_temp(x,y))
         self.button=None
         square.co_no+=1
         
@@ -170,22 +169,6 @@ def readable_button(cube,face):
 def readable_pices(cube,face):
     return [[select_column(cube,face,1,1),select_column(cube,face,1,2),select_column(cube,face,1,3)],[select_column(cube,face,2,1),select_column(cube,face,2,2),select_column(cube,face,2,3)],[select_column(cube,face,3,1),select_column(cube,face,3,2),select_column(cube,face,3,3)]]
 
-# class client():
-#     grid1=cube("grid1")
-#     Player="X"
-#     window=tk.Tk()
-#     print(f"Player \"{Player}\"('s) Turn: ")
-#     buttons=[j.button for j in [i for i in readable_pices(grid1,1)]]
-
-# def button_pressed_update(x,y):
-#     row=y
-#     column=x
-#     ttt.update(client.grid1,client.Player,row,column)
-#     for i in client.buttons:
-#         i.grid_remove()
-#     client.buttons=[j for j in [i for i in readable_pices(client.grid1,1)]]
-#     for i in client.buttons:
-#         i.button.grid(row=i.point.y,column=i.point.x)
 
 #This function is very temperory will improve(soon)
 # It shows the colours of the cube per face in the atribute
