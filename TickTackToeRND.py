@@ -41,7 +41,7 @@ class instance:
         self.buttonFrame=tk.Frame(window,bg="lightblue")
         self.textFrame=tk.Frame(window,bg="lightblue")
         self.style=ttk.Style()
-        self.string=tk.Label(self.textFrame,text=f"It is player {self.Player}'s Turn: ",bd=2,relief="sunken",font=("Arial",int(self.window.winfo_screenwidth()*(18/1536))),bg="lightblue")
+        self.string=tk.Label(self.textFrame,text=f"It is player {self.Player}'s Turn: ",bd=2,relief="sunken",font=("Arial",int(self.window.winfo_screenwidth()*(12/1536))),bg="lightblue")
         self.buttons=instance.get_buttons(self)
     def config(self):
         self.window.configure(bg="lightblue",highlightbackground="lightblue", highlightcolor="lightblue")
@@ -61,14 +61,14 @@ class instance:
         if Occupied == False:
             if game.win_check(self) == False:
                 print(f"The Player \"{self.Player}\" Wins. Good Job!")
-                self.string["font"]=("Arial",int(self.window.winfo_screenwidth()*(12/1536)))
+                self.string["font"]=("Arial",int(self.window.winfo_screenwidth()*(9/1536)))
                 self.string["bd"]=0
                 self.textFrame.pack(anchor="center",pady=(self.window.winfo_height() // 2, 0))
                 self.string["text"]=f"The Player \"{self.Player}\" Wins. Good Job!"
                 instance.Destruction(self)
             elif instance.tie_check(self) == True:
                 print(f"The Player \"{self.Player}\" Wins. Good Job!")
-                self.string["font"]=("Arial",int(self.window.winfo_screenwidth()*(10/1536)))
+                self.string["font"]=("Arial",int(self.window.winfo_screenwidth()*(8/1536)))
                 self.string["bd"]=0
                 self.textFrame.pack(anchor="center",pady=(self.window.winfo_height() // 2, 0))
                 self.string["text"]=f"There was a tie between the players!"
