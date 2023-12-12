@@ -5,8 +5,6 @@ import os
 import math
 import CartesianSystem as csys
 import tkinter as tk
-import TickTackToeRND as ttt
-
 
 
 class square:
@@ -79,7 +77,7 @@ class cube:
 #Class for storing the cube object and opening it
 class storage:
     cubebag=[]
-    def exportt(cube,file="C:\\Users\\ashis\\OneDrive\\Documents\\Nikhil\'s Projects\\Cube_0.01\\",name='cube.log'):
+    def exportt(cube,file="",name='cube.log'):
         if file !='':
             file+='/'
         fh= open(file+name,'wb')
@@ -87,7 +85,7 @@ class storage:
         fh.close()
         return("Sucessfully Exported {}!")
     
-    def importt(file="C:\\Users\\ashis\\OneDrive\\Documents\\Nikhil\'s Projects\\Cube_0.01\\",name='cube.log'):
+    def importt(file="",name='cube.log'):
         fh= open(file+name,'rb')
         imported_cubes=[]
         if file !='':
@@ -114,7 +112,7 @@ class storage:
     
 
     def update_storage():
-        for i in os.listdir(r"C:\Users\ashis\OneDrive\Documents\Nikhil's Projects\Cube_0.01"):
+        for i in os.listdir():
             if i.endswith('.log'):
                 storage.cubebag+=storage.importt(name=i)
 
