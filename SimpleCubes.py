@@ -2,13 +2,11 @@
 #to get the paths and manage them
 import pickle
 import os
-import math
 import CartesianSystem as csys
-import tkinter as tk
 
 
 class square:
-    default=''
+    defaultcolour='None'
     co_no=1
     def __init__(self,colour,x,y):
         self.colour=colour
@@ -37,31 +35,23 @@ class square:
 # rows contain 3 squares in a straight line
 class row:
     ro_no=1
-    def __init__(self,cbdata):
-        # self.co1=square(square.default,square.co_no_perrow(square.co_no,row.ro_no),row.ro_no)
-        # self.co2=square(square.default,square.co_no_perrow(square.co_no,row.ro_no),row.ro_no)
-        # self.co3=square(square.default,square.co_no_perrow(square.co_no,row.ro_no),row.ro_no)
-        self.columns={}
-        for i in range(cbdata[1]):
-            self.columns[f'co{i+1}']=square(square.default,square.co_no_perrow(square.co_no,row.ro_no),row.ro_no)
+    def __init__(self,griddata):
+        self.co_list={}
+        for i in range(griddata[1]):
+            self.co_list[f'co{i+1}']=square(square.defaultcolour,square.co_no_perrow(square.co_no,row.ro_no),row.ro_no)
+            self.no_of_columns=len(self.co_list)
         self.ro_no=row.ro_no
         row.ro_no+=1
         
 # face contains 3 rows, one below the other with makes it contain 9 of those little squares
 class face:
     fc_no=1
-    def __init__(self,vector,cbdata):
+    def __init__(self,vector,griddata):
         direction,axis=vector
-        # direction,axis=vector
-        # self.ro1=row()
-        # self.ro2=row()
-        # self.ro3=row()
-        # self.faceareavector=faceareavector(direction,axis)
-        # self.fc_no=face.fc_no
-        # face.fc_no+=1
-        # self.ro1={}
-        # for i in range(cbdata[0]):
-        #     self.ro_list[f'ro{i+1}']=row(cbdata)
+        self.ro_list={}
+        for i in range(griddata[0]):
+            self.ro_list[f'ro{i+1}']=row(griddata)
+        self.no_of_rows=len(self.ro_list)
         self.faceareavector=faceareavector(direction,axis)
         self.fc_no=face.fc_no
         face.fc_no+=1
@@ -74,13 +64,18 @@ class cube:
     def __init__(self,cubename=cbname,cubedata=(6,3,3)):#(no_of_faces,no_of_rows,no_of_columns)=(6,3,3)
         self.cbdata=cubedata
         self.griddata=(self.cbdata[1],self.cbdata[2])
-        self.face1=face(('+','x'),self.griddata)
-        self.face2=face(('+','y'),self.griddata)
-        self.face3=face(('+','z'),self.griddata)
-        self.face4=face(('-','x'),self.griddata)
-        self.face5=face(('-','y'),self.griddata)
-        self.face6=face(('-','z'),self.griddata)
-        #this might go wrong(i will know when i test it) - it didn't most probably -> yes it didn't
+        self.face_list={}
+        for i in range(self.cbdata[0]):
+            self.face_list[f'face{i+1}']=face(('noSign','noAxis'),self.griddata)
+        self.no_of_faces=len(self.face_list)
+        #backup that i most probably won't need
+        # self.face1=face(('+','x'),self.griddata)
+        # self.face2=face(('+','y'),self.griddata)
+        # self.face3=face(('+','z'),self.griddata)
+        # self.face4=face(('-','x'),self.griddata)
+        # self.face5=face(('-','y'),self.griddata)
+        # self.face6=face(('-','z'),self.griddata)
+        # #this might go wrong(i will know when i test it) - it didn't most probably -> yes it didn't
         self.cbname=cubename
         cube.cbno+=1
         cube.cbname='cube {}'.format(cube.cbno)
@@ -88,16 +83,19 @@ class cube:
 
 #Class for storing the cube object and opening it
 class storage:
+    # default_file_path_1=""
+    # default_file_path_2=""
+    default_file_path="C:\\Users\\ashis\\OneDrive\\Documents\\Nikhil\'s Projects\\Cube_0.01\\"
     cubebag=[]
-    def exportt(cube,file="",name='cube.log'):
+    def exportt(cube,file=default_file_path,name='cube.log'):
         if file !='':
             file+='/'
         fh= open(file+name,'wb')
         pickle.dump(cube,fh)
         fh.close()
-        return("Sucessfully Exported {}!")
+        return("Sucessfully Exported to {name}!")
     
-    def importt(file="",name='cube.log'):
+    def importt(file=default_file_path,name='cube.log'):
         fh= open(file+name,'rb')
         imported_cubes=[]
         if file !='':
@@ -124,7 +122,7 @@ class storage:
     
 
     def update_storage():
-        for i in os.listdir():
+        for i in os.listdir(storage.default_file_path):
             if i.endswith('.log'):
                 storage.cubebag+=storage.importt(name=i)
 
@@ -154,40 +152,41 @@ def cubeNotFound(cubename):
         
 
 # this series function make my life easier and There might be a way to compress this into one function but I dont want to overload my two small brain cells 
-def select_face(cube,face) -> face:
-    selected_faces=[cube.face1,cube.face2,cube.face3,cube.face4,cube.face5,cube.face6]
-    return selected_faces[face-1]
-def select_row(cube,face,row) -> row:
-    selected_rows=[select_face(cube,face).ro1,select_face(cube,face).ro2,select_face(cube,face).ro3]
-    return selected_rows[row-1]
+def select_face(cube,face_no) -> face:
+    #backup if things screw up
+    #selected_faces=[cube.face1,cube.face2,cube.face3,cube.face4,cube.face5,cube.face6]
+    #selected_faces[face_no-1]
+    return cube.face_list[f'face{face_no}']
+def select_row(cube,face_no,row_no) -> row:
+    return select_face(cube,face_no).ro_list[f'ro{row_no}']
 #This is the final and most useable function which takes Cube Name(Variable),Face no.,row no. and column no. to give the object of that column to be used to get the co_no or the colour(Which are the only functions I have managed to code till now)
-def select_column(cube,face,row,column) -> square:
-    selected_columns=[(select_row(cube,face,row).co1),(select_row(cube,face,row).co2),(select_row(cube,face,row).co3)]
-    return selected_columns[column-1]
+def select_column(cube,face_no,row_no,column_no) -> square:
+    return select_row(cube,face_no,row_no).co_list[f'co{column_no}']
 
 
 
 # This function gives me a formatted version of the cube
-def readable_face(cube,face):
-    return [[select_column(cube,face,1,1).colour,select_column(cube,face,1,2).colour,select_column(cube,face,1,3).colour],[select_column(cube,face,2,1).colour,select_column(cube,face,2,2).colour,select_column(cube,face,2,3).colour],[select_column(cube,face,3,1).colour,select_column(cube,face,3,2).colour,select_column(cube,face,3,3).colour]]
+def printable_face(cube,face_no):
+    return [[select_column(cube,face_no,i+1,j+1).colour for j in range(len(select_row(cube,face_no,i+1).co_list))] for i in range(len(select_face(cube,face_no).ro_list))]
 
 # This function gives me a the buttons from the columns
-def readable_button(cube,face):
-    return [[select_column(cube,face,1,1).button,select_column(cube,face,1,2).button,select_column(cube,face,1,3).button],[select_column(cube,face,2,1).button,select_column(cube,face,2,2).button,select_column(cube,face,2,3).button],[select_column(cube,face,3,1).button,select_column(cube,face,3,2).button,select_column(cube,face,3,3).button]]
+def readable_button(cube,face_no):
+    return [[select_column(cube,face_no,i+1,j+1).button for j in range(len(select_row(cube,face_no,i+1).co_list))] for i in range(len(select_face(cube,face_no).ro_list))]
 
 #Aggrigate of the above two functions
-def readable_pices(cube,face):
-    return [[select_column(cube,face,1,1),select_column(cube,face,1,2),select_column(cube,face,1,3)],[select_column(cube,face,2,1),select_column(cube,face,2,2),select_column(cube,face,2,3)],[select_column(cube,face,3,1),select_column(cube,face,3,2),select_column(cube,face,3,3)]]
+def readable_pices(cube,face_no):
+    return [[select_column(cube,face_no,i+1,j+1) for j in range(len(select_row(cube,face_no,i+1).co_list))] for i in range(len(select_face(cube,face_no).ro_list))]
 
 
 #This function is very temperory will improve(soon)
 # It shows the colours of the cube per face in the atribute
-def show_face(cube, face):
+def show_face(cube, face_no):
+    returnlist=[[select_column(cube,face_no,i+1,j+1) for j in range(len(select_row(cube,face_no,i+1).co_list))] for i in range(len(select_face(cube,face_no).ro_list))]
     returnstr=""
-    for i in range(0,3):
-        for j in range(0,3):
-            returnstr+=readable_face(cube,face)[i][j]+"\t"
-        returnstr+='\n'
+    for i in range(select_face(cube,face_no).no_of_rows):
+        for j in range(select_row(cube,face_no,i+1).no_of_columns):
+            returnstr+=printable_face(cube,face_no)[i][j]+"\t"
+        returnstr+='\n\v'
     return(returnstr)
 
 
@@ -196,7 +195,7 @@ def show_face(cube, face):
 #Quick function to show all faces of the cube
 def show_allFace(cube):
     returnstr=""
-    for i in range(6):
+    for i in range(cube.no_of_faces):
         returnstr+="Face {}:\n".format(i+1)
         returnstr+=show_face(cube,i+1)
     return(returnstr)

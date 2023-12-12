@@ -4,6 +4,7 @@ import itertools as itool
 import tkinter as tk
 from tkinter import ttk
 class game:
+    sc.square.defaultcolour=''
     def update(instance,row,column):
         if sc.select_column(instance.cube,1,row,column).colour=='':
             sc.select_column(instance.cube,1,row,column).colour=instance.Player
@@ -28,7 +29,7 @@ class game:
         check = True
         for i in comb:
             if csys.line.equation(csys.line(i[0],i[1]),i[2]):
-                if sc.select_column(instance.cube,1,i[0].y,i[0].x).colour!=sc.square.default and sc.select_column(instance.cube,1,i[1].y,i[1].x).colour!=sc.square.default and sc.select_column(instance.cube,1,i[2].y,i[2].x).colour!=sc.square.default and sc.select_column(instance.cube,1,i[0].y,i[0].x).colour==sc.select_column(instance.cube,1,i[1].y,i[1].x).colour and sc.select_column(instance.cube,1,i[1].y,i[1].x).colour==sc.select_column(instance.cube,1,i[2].y,i[2].x).colour:
+                if sc.select_column(instance.cube,1,i[0].y,i[0].x).colour!=sc.square.defaultcolour and sc.select_column(instance.cube,1,i[1].y,i[1].x).colour!=sc.square.defaultcolour and sc.select_column(instance.cube,1,i[2].y,i[2].x).colour!=sc.square.defaultcolour and sc.select_column(instance.cube,1,i[0].y,i[0].x).colour==sc.select_column(instance.cube,1,i[1].y,i[1].x).colour and sc.select_column(instance.cube,1,i[1].y,i[1].x).colour==sc.select_column(instance.cube,1,i[2].y,i[2].x).colour:
                     check=False
                     #backup testing perpouse print statement
                     #print(sc.select_column(self.cube,1,i[0].y,i[0].x).colour+"\n"+sc.select_column(self.cube,1,i[1].y,i[1].x).colour+"\n"+sc.select_column(self.cube,1,i[2].y,i[2].x).colour)
