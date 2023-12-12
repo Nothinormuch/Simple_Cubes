@@ -41,7 +41,7 @@ class instance:
         self.buttonFrame=tk.Frame(window,bg="lightblue")
         self.textFrame=tk.Frame(window,bg="lightblue")
         self.style=ttk.Style()
-        self.string=tk.Label(self.textFrame,text=f"It is player {self.Player}'s Turn: ",bd=2,relief="sunken",font=("Arial",18),bg="lightblue")
+        self.string=tk.Label(self.textFrame,text=f"It is player {self.Player}'s Turn: ",bd=2,relief="sunken",font=("Arial",int(self.window.winfo_screenwidth()*(18/1536))),bg="lightblue")
         self.buttons=instance.get_buttons(self)
     def config(self):
         self.window.configure(bg="lightblue",highlightbackground="lightblue", highlightcolor="lightblue")
@@ -51,7 +51,7 @@ class instance:
         self.buttonFrame.pack()
         self.window.title("TickTackToe")
         self.string.pack()
-        self.window.geometry('230x285')
+        self.window.geometry(f'{int(self.window.winfo_screenwidth()*(115/768))}x{int(self.window.winfo_screenheight()*(95/288))}')#'230x285'
         self.Construction()
         self.window.resizable(False,False)
         self.window.mainloop()
@@ -61,14 +61,14 @@ class instance:
         if Occupied == False:
             if game.win_check(self) == False:
                 print(f"The Player \"{self.Player}\" Wins. Good Job!")
-                self.string["font"]=("Arial",12)
+                self.string["font"]=("Arial",int(self.window.winfo_screenwidth()*(12/1536)))
                 self.string["bd"]=0
                 self.textFrame.pack(anchor="center",pady=(self.window.winfo_height() // 2, 0))
                 self.string["text"]=f"The Player \"{self.Player}\" Wins. Good Job!"
                 instance.Destruction(self)
             elif instance.tie_check(self) == True:
                 print(f"The Player \"{self.Player}\" Wins. Good Job!")
-                self.string["font"]=("Arial",10)
+                self.string["font"]=("Arial",int(self.window.winfo_screenwidth()*(10/1536)))
                 self.string["bd"]=0
                 self.textFrame.pack(anchor="center",pady=(self.window.winfo_height() // 2, 0))
                 self.string["text"]=f"There was a tie between the players!"
@@ -84,7 +84,7 @@ class instance:
         for i in range(1,len(sc.readable_pices(self.cube,1))+1):
             for j in range(1,len(sc.readable_pices(self.cube,1)[i-1])+1):
                 selected_column=sc.select_column(self.cube,1,i,j)
-                selected_column.button=tk.Button(self.buttonFrame,bg="lightblue",activebackground="lightblue",text=selected_column.colour,height=5,width=10,padx=0,pady=0,command=lambda x=selected_column.point.x,y=selected_column.point.y: instance.when_pressed(self,x,y))
+                selected_column.button=tk.Button(self.buttonFrame,bg="lightblue",activebackground="lightblue",text=selected_column.colour,height=int(self.window.winfo_screenheight()*(5/864)),width=int(self.window.winfo_screenwidth()*(10/1536)),padx=0,pady=0,command=lambda x=selected_column.point.x,y=selected_column.point.y: instance.when_pressed(self,x,y))
                 buttons.append(selected_column.button)
         return buttons
 
