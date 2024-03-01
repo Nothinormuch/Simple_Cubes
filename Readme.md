@@ -1,3 +1,3 @@
-# Cube_0.01
-This project is my jouerny towards practicing python and my highschool's final program!
-Anyone and everyone may use the assets provided in this project without permission.
+# Simple Cubes
+This project is my jouerny through gaining basic python skills!
+Anyone and everyone may use the assets from this project in personal use but for comercial the name of the creator need to be mentioned in disclaimers.
