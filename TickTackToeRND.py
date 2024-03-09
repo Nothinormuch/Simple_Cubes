@@ -82,16 +82,16 @@ class instance:
 
     def get_buttons(self) -> list:
         buttons=[]
-        for i in range(1,len(sc.readable_pices(self.cube,1))+1):
-            for j in range(1,len(sc.readable_pices(self.cube,1)[i-1])+1):
+        for i in range(1,len(sc.readable_columns(self.cube,1))+1):
+            for j in range(1,len(sc.readable_columns(self.cube,1)[i-1])+1):
                 selected_column=sc.select_column(self.cube,1,i,j)
                 selected_column.button=tk.Button(self.buttonFrame,bg="lightblue",activebackground="lightblue",text=selected_column.colour,height=int(self.window.winfo_screenheight()*(5/864)),width=int(self.window.winfo_screenwidth()*(10/1536)),padx=0,pady=0,command=lambda x=selected_column.point.x,y=selected_column.point.y: instance.when_pressed(self,x,y))
                 buttons.append(selected_column.button)
         return buttons
 
     def Construction(self):
-        for i in range(1,len(sc.readable_pices(self.cube,1))+1):
-            for j in range(1,len(sc.readable_pices(self.cube,1)[i-1])+1):
+        for i in range(1,len(sc.readable_columns(self.cube,1))+1):
+            for j in range(1,len(sc.readable_columns(self.cube,1)[i-1])+1):
                 selected_column=sc.select_column(self.cube,1,i,j)
                 selected_column.button.grid(row=selected_column.point.y,column=selected_column.point.x)
 
