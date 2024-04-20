@@ -3,7 +3,7 @@
 import pickle
 import os
 import CartesianSystem as csys
-
+import mysql.connector as mysql
 
 class square:
     defaultcolour='None'
@@ -88,51 +88,122 @@ class cube:
                 for j in range(1,returncube.cbdata[2]+1):
                     select_column(returncube,properties.index(property)+1,i,j).colour=property[1]
         return returncube
+class connection:
+    connectionData={"hostaddress":"localhost","username":"root","port":"3306","password":None}
+    storageMode="file"
+
+class cubebag:
+    bagno=1
+    storageMode=connection.storageMode
+    connectionData=connection.connectionData
+    def __init__(self,bagname="CubeBag {}".format(bagno)):
+        if cubebag.storageMode=="file":
+            self.inventory=[]
+            self.bagname=bagname
+            self.bagno=cubebag.bagno
+            cubebag.bagno+=1
+        elif cubebag.storageMode=="database":
+            if cubebag.connectionData["password"]==None:
+                connection=mysql.connect(host=cubebag.connectionData["hostaddress"],user=cubebag.connectionData["username"],port=cubebag.connectionData["port"],passwd=cubebag.connectionData["password"],database=cubebag.connectionData["username"]+"_Cubes")
+            else:
+                connection=mysql.connect(host=cubebag.connectionData["hostaddress"],user=cubebag.connectionData["username"],port=cubebag.connectionData["port"],database=cubebag.connectionData["username"]+"_Cubes")
+            cursor=connection.cursor()
+            cursor.execute("Create table {}(cubeNumber int,cubeName varchar(100),cubeObject text);".format(self.bagname))
+            connection.close()
+            self.bagname=bagname
+            self.bagno=cubebag.bagno
+            cubebag.bagno+=1
 
 
+    def __str__(self):
+        if cubebag.storageMode=="file":
+            return(self.bagname+" : {}".format([x.cbname for x in self.inventory]))
+        elif cubebag.storageMode=="database":
+            if cubebag.connectionData["password"]==None:
+                connection=mysql.connect(host=cubebag.connectionData["hostaddress"],user=cubebag.connectionData["username"],port=cubebag.connectionData["port"],passwd=cubebag.connectionData["password"],database=cubebag.connectionData["username"]+"_Cubes")
+            else:
+                connection=mysql.connect(host=cubebag.connectionData["hostaddress"],user=cubebag.connectionData["username"],port=cubebag.connectionData["port"],database=cubebag.connectionData["username"]+"_Cubes")
+            cursor=connection.cursor()
+            cursor.execute("select cubeName from {};".format(self.bagname))
+            cubes=cursor.fetchall()
+            connection.close()
+            return(self.bagname+" : {}".format([x.cbname for x in cubes]))
 #Class for storing the cube object and opening it
 class storage:
     default_file_path=os.getcwd()
-    cubebag=[]
-    def exportt(cube,file=default_file_path,name='cube.log'):
-        if not(file.endswith('\\') or file.endswith(':') or file==''):
-            file+='\\'
-        if file=='':
-            file=storage.default_file_path
-        fh= open(file+name,'wb')
-        pickle.dump(cube,fh)
-        fh.close()
-        return("Sucessfully Exported to {name}!")
-    
-    def importt(file=default_file_path,name='cube.log'):
-        if not(file.endswith('\\') or file.endswith(':') or file==''):
-            file+='\\'
-        if file=='':
-            file=storage.default_file_path
-        fh= open(file+name,'rb')
-        imported_cubes=[]
-        try:
-            while True:
-                imported_cubes.append(pickle.load(fh))
+    storageMode=connection.storageMode
+    connectionData=connection.connectionData
+    if connectionData["password"]==None:
+        connection=mysql.connect(host=connectionData["hostaddress"],user=connectionData["username"],port=connectionData["port"])
+    else:
+        connection=mysql.connect(host=connectionData["hostaddress"],user=connectionData["username"],port=connectionData["port"],passwd=connectionData["password"])
+    cursor=connection.cursor()
+    cursor.execute("show databases;")
+    databasesPresent=cursor.fetchall()
+    print(connectionData["username"]+"_Cubes".lower()+": {}".format([x[0].lower() for x in databasesPresent]))
+    if not(connectionData["username"]+"_Cubes".lower() in [x[0].lower() for x in databasesPresent]):
+        cursor.execute("Create database {}_Cubes;".format(connectionData["username"]))
+    connection.close()
 
-        except FileNotFoundError:
-            storage.fileNotFound(file,name)
-        finally:
+
+    defaultCubebag=cubebag()
+
+
+    def exportt(cube,file=default_file_path,name='cube.log',cubebag=defaultCubebag):
+        if storage.storageMode=="file":
+            if not(file.endswith('\\') or file.endswith(':') or file==''):
+                file+='\\'
+            if file=='':
+                file=storage.default_file_path
+            fh= open(file+name,'wb')
+            pickle.dump(cube,fh)
             fh.close()
+            return("Sucessfully Exported to {name}!")
+        elif storage.storageMode=="database":
+            if storage.connectionData["password"]==None:
+                connection=mysql.connect(host=storage.connectionData["hostaddress"],user=storage.connectionData["username"],port=storage.connectionData["port"],passwd=storage.connectionData["password"],database=storage.connectionData["username"]+"_Cubes")
+            else:
+                connection=mysql.connect(host=storage.connectionData["hostaddress"],user=storage.connectionData["username"],port=storage.connectionData["port"],database=storage.connectionData["username"]+"_Cubes")
+            cursor=connection.cursor()
+            print("Insert into \"{}\" values(\"{}\",\"{}\",\"{}\")".format(cubebag.bagname,cubebag.bagno,cube.cbname,pickle.dumps(cube)))
+            cursor.execute("Insert into \"{}\" values(\"{}\",\"{}\",\"{}\")".format(cubebag.bagname,cubebag.bagno,cube.cbname,pickle.dumps(cube)))
+
+    
+
+
+    def importt(file=default_file_path,name='cube.log',cubebag=defaultCubebag):
+        if storage.storageMode=="file":
+            if not(file.endswith('\\') or file.endswith(':') or file==''):
+                file+='\\'
+            if file=='':
+                file=storage.default_file_path
+            fh= open(file+name,'rb')
+            imported_cubes=[]
+            try:
+                while True:
+                    imported_cubes.append(pickle.load(fh))
+
+            except FileNotFoundError:
+                storage.fileNotFound(file,name)
+            finally:
+                fh.close()
+                return imported_cubes
+        elif storage.storageMode=="database":
+            if storage.connectionData["password"]==None:
+                connection=mysql.connect(host=storage.connectionData["hostaddress"],user=storage.connectionData["username"],port=storage.connectionData["port"],passwd=storage.connectionData["password"],database=storage.connectionData["username"]+"_Cubes")
+            else:
+                connection=mysql.connect(host=storage.connectionData["hostaddress"],user=storage.connectionData["username"],port=storage.connectionData["port"],database=storage.connectionData["username"]+"_Cubes")
+            cursor=connection.cursor()
+            cursor.execute("select cubeObject from {};".format(cubebag.bagname))
+            imported_cubes=[pickle.loads(x) for x in cursor.fetchall()]
             return imported_cubes
+
         
     def fileNotFound(file,name):
         print("No file with the name \"{}\" found in \"{}\" folder!".format(name,file))
-
-    def show_cubes(cubes):
-        returnstr=""
-        for i in cubes:
-            returnstr+=i.cbname+':\n'
-            returnstr+=show_allFace(i)+'\n'
-        return(returnstr)
     
 
-    def update_storage(file_path=default_file_path):
+    def importtAll(file_path=default_file_path,cubebag=defaultCubebag):
         found=False
         if not(file_path.endswith('\\') or file_path.endswith(':') or file_path==''):
             file_path='\\'
@@ -141,7 +212,7 @@ class storage:
         # print(os.listdir(file_path))
         for i in os.listdir(file_path):
             if i.endswith('.log'):
-                storage.cubebag+=storage.importt(name=i,file=file_path)
+                cubebag.inventory+=storage.importt(name=i,file=file_path)
                 found=True
         if found==False:
             print("No File with the Extension .log found!")
@@ -158,9 +229,9 @@ class faceareavector:
         return str(self.direction)+str(self.axis)
 
 #adding cubes in the list cube            
-def chose_activecube(cubename,cubegag=storage.cubebag):
+def chose_activecube(cubename,cubebag=storage.defaultCubebag):
     ck=False
-    for i in cubegag:
+    for i in cubebag.inventory:
         if i.cbname==cubename:
             ck=True
             return i
@@ -237,6 +308,13 @@ def show_allFace(cube):
         returnstr+="\tFace {}:\n".format(i+1)
         returnstr+=show_face(cube,i+1)
     return(returnstr)
+
+def show_cubes(cubes):
+        returnstr=""
+        for i in cubes:
+            returnstr+=i.cbname+':\n'
+            returnstr+=show_allFace(i)+'\n'
+        return(returnstr)
 
 
 #Updating Storage
